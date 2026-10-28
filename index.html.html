@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Personal de Stefany ✨</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        butter: {
+                            50: '#FFFDF5',
+                            100: '#FFF9E5',
+                            200: '#FFF3B0',
+                            300: '#FFE785',
+                            DEFAULT: '#FFF3B0',
+                        },
+                        sky: {
+                            50: '#F0F9FF',
+                            100: '#E0F2FE',
+                            200: '#BAE6FD',
+                            300: '#7DD3FC',
+                            400: '#38BDF8',
+                            DEFAULT: '#87CEEB',
+                        },
+                        gold: {
+                            100: '#FDF8E2',
+                            300: '#E6CA65',
+                            500: '#D4AF37',
+                            600: '#C5A059',
+                            700: '#B8860B',
+                            DEFAULT: '#D4AF37',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        hand: ['"Caveat"', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main, #FFF9E5);
+            color: #334155;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .custom-card {
+            background-color: var(--card-bg, #FFFFFF);
+            border: 1px solid var(--border-color, rgba(212, 175, 55, 0.25));
+        }
+        .btn-gold {
+            background-color: var(--primary-gold, #D4AF37);
+            color: #FFFFFF;
+            transition: all 0.2s ease;
+        }
+        .btn-gold:hover {
+            filter: brightness(0.92);
+            transform: translateY(-1px);
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12">
+    <div id="app" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+
+        <!-- HEADER & BRANDING EXCLUSIVO STEFANY -->
+        <header class="glass-header rounded-3xl p-6 mb-8 shadow-sm border border-gold-300/30 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-butter-200 via-sky-200 to-gold-500 flex items-center justify-center text-2xl shadow-inner text-gold-700">
+                    <i class="fa-solid fa-sparkles"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">
+                        Agenda de Stefany ✨
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">
+                        Tu espacio organizado: Crochet, Trabajo, Iglesia y tiempo con Jeremy
+                    </p>
+                </div>
+            </div>
+
+            <!-- Botones de Acción / Configuración -->
+            <div class="flex items-center gap-3">
+                <button @click="showModal = true" class="btn-gold font-semibold px-4 py-2.5 rounded-xl text-sm shadow-md flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Nueva Actividad</span>
+                </button>
+                <button @click="showThemeSettings = !showThemeSettings" class="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition shadow-sm" title="Personalizar Colores">
+                    <i class="fa-solid fa-palette text-gold font-bold"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- PANEL DE PERSONALIZACIÓN DE COLORES -->
+        <transition enter-active-class="transition duration-200 ease-out" enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100" leave-active-class="transition duration-150 ease-in" leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
+            <div v-if="showThemeSettings" class="custom-card p-5 rounded-2xl mb-8 shadow-lg bg-white border-l-4 border-l-gold-500">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-paint-brush text-gold-500"></i> Personalización de Estilo
+                    </h3>
+                    <button @click="showThemeSettings = false" class="text-slate-400 hover:text-slate-600">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Color Principal (Fondo)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="color" v-model="theme.bgColor" class="w-10 h-10 rounded cursor-pointer border border-slate-300">
+                            <span class="text-xs text-slate-500 font-mono">{{ theme.bgColor }}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Tono Dorado Accent</label>
+                        <div class="flex items-center gap-2">
+                            <input type="color" v-model="theme.goldAccent" class="w-10 h-10 rounded cursor-pointer border border-slate-300">
+                            <span class="text-xs text-slate-500 font-mono">{{ theme.goldAccent }}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Tono Azul Cielo</label>
+                        <div class="flex items-center gap-2">
+                            <input type="color" v-model="theme.skyAccent" class="w-10 h-10 rounded cursor-pointer border border-slate-300">
+                            <span class="text-xs text-slate-500 font-mono">{{ theme.skyAccent }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 flex justify-end gap-2">
+                    <button @click="resetTheme" class="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:underline">Restablecer por defecto</button>
+                </div>
+            </div>
+        </transition>
+
+        <!-- SECCIÓN SUPERIOR: PROGRESO Y CONSEJO DIARIO -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+            <!-- BARRA DE PROGRESO SEMANAL -->
+            <div class="custom-card p-6 rounded-3xl bg-white shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Progreso Semanal</span>
+                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-butter-200 text-gold-700">{{ progressPercentage }}% Completado</span>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-800 mb-3">Metas Cumplidas</h2>
+                    <div class="w-full bg-slate-100 h-4 rounded-full overflow-hidden p-0.5 border border-slate-200 mb-4">
+                        <div class="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-sky-400 via-butter-300 to-gold-500" :style="{ width: progressPercentage + '%' }"></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-center pt-2 border-t border-slate-100">
+                    <div class="bg-sky-50 p-2.5 rounded-xl border border-sky-100">
+                        <p class="text-xs text-slate-500 font-medium">Actividades</p>
+                        <p class="text-lg font-extrabold text-slate-700">{{ totalTasks }}</p>
+                    </div>
+                    <div class="bg-butter-50 p-2.5 rounded-xl border border-butter-100">
+                        <p class="text-xs text-slate-500 font-medium">Completadas</p>
+                        <p class="text-lg font-extrabold text-gold-700">{{ completedTasks }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONSEJO DIARIO DE GESTIÓN DEL TIEMPO -->
+            <div class="lg:col-span-2 custom-card p-6 rounded-3xl bg-gradient-to-br from-white via-butter-50 to-sky-50 shadow-sm border border-gold-300/30 flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-gold-700 text-8xl pointer-events-none">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-sky-200 text-sky-800">
+                            <i class="fa-solid fa-lightbulb text-gold-600"></i> Consejo del Día
+                        </span>
+                        <button @click="nextTip" class="text-xs font-bold text-gold-700 hover:text-gold-600 flex items-center gap-1 bg-white/80 px-3 py-1 rounded-lg border border-gold-200 shadow-sm transition">
+                            <i class="fa-solid fa-rotate"></i> Nuevo Consejo
+                        </button>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">{{ currentTip.title }}</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">{{ currentTip.description }}</p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-gold-200/40 flex items-center gap-2 text-xs font-medium text-slate-500">
+                    <i class="fa-solid fa-quote-left text-gold-500"></i>
+                    <span>{{ currentTip.subtext }}</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FILTROS DE DÍAS Y VISTA DE TABLA -->
+        <section class="custom-card rounded-3xl bg-white shadow-sm overflow-hidden mb-8">
+            
+            <!-- CONTROLES Y TABS DE DÍAS -->
+            <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-week text-gold-600"></i> Agenda Semanal
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Filtra por día o visualiza toda tu rutina semanal</p>
+                </div>
+
+                <!-- SELECTOR DE DÍAS -->
+                <div class="flex flex-wrap gap-1 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-inner w-full md:w-auto">
+                    <button @click="selectedDay = 'Todos'" :class="['px-3 py-1.5 rounded-xl text-xs font-bold transition-all', selectedDay === 'Todos' ? 'bg-gold-500 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100']">
+                        Todos
+                    </button>
+                    <button v-for="day in days" :key="day" @click="selectedDay = day" :class="['px-3 py-1.5 rounded-xl text-xs font-bold transition-all', selectedDay === day ? 'bg-gold-500 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100']">
+                        {{ day.substring(0,3) }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- TABLA / LISTA DE ACTIVIDADES -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100/70 text-slate-500 text-xs uppercase tracking-wider font-semibold border-b border-slate-200">
+                            <th class="py-3.5 px-4 sm:px-6">Estado</th>
+                            <th class="py-3.5 px-4 sm:px-6">Actividad / Categoría</th>
+                            <th class="py-3.5 px-4 sm:px-6">Día y Fecha</th>
+                            <th class="py-3.5 px-4 sm:px-6">Horario</th>
+                            <th class="py-3.5 px-4 sm:px-6">Notas</th>
+                            <th class="py-3.5 px-4 sm:px-6 text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm">
+                        <tr v-for="task in filteredTasks" :key="task.id" :class="['hover:bg-butter-50/40 transition-colors', task.completed ? 'bg-slate-50/60 opacity-75' : '']">
+                            <!-- Checkbox Estado -->
+                            <td class="py-4 px-4 sm:px-6">
+                                <button @click="toggleTask(task.id)" :class="['w-6 h-6 rounded-lg border flex items-center justify-center transition-all', task.completed ? 'bg-gold-500 border-gold-500 text-white' : 'border-slate-300 hover:border-gold-400 bg-white']">
+                                    <i v-if="task.completed" class="fa-solid fa-check text-xs"></i>
+                                </button>
+                            </td>
+
+                            <!-- Nombre y Categoria -->
+                            <td class="py-4 px-4 sm:px-6">
+                                <div class="flex items-center gap-3">
+                                    <span :class="['w-9 h-9 rounded-xl flex items-center justify-center text-sm shadow-sm', getCategoryBadge(task.category)]">
+                                        <i :class="getCategoryIcon(task.category)"></i>
+                                    </span>
+                                    <div>
+                                        <p :class="['font-bold text-slate-800', task.completed ? 'line-through text-slate-400' : '']">{{ task.title }}</p>
+                                        <span class="inline-block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                                            {{ task.category }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Día y Fecha -->
+                            <td class="py-4 px-4 sm:px-6">
+                                <div class="font-semibold text-slate-700">{{ task.day }}</div>
+                                <div class="text-xs text-slate-400">{{ formatDate(task.date) }}</div>
+                            </td>
+
+                            <!-- Horario -->
+                            <td class="py-4 px-4 sm:px-6 font-medium text-slate-600">
+                                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-xs font-mono">
+                                    <i class="fa-regular fa-clock text-gold-600"></i>
+                                    <span>{{ formatTime12H(task.startTime) }} - {{ formatTime12H(task.endTime) }}</span>
+                                </div>
+                            </td>
+
+                            <!-- Notas -->
+                            <td class="py-4 px-4 sm:px-6 text-xs text-slate-500 max-w-xs truncate">
+                                {{ task.notes || '—' }}
+                            </td>
+
+                            <!-- Acciones -->
+                            <td class="py-4 px-4 sm:px-6 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <button @click="editTask(task)" class="p-1.5 text-slate-400 hover:text-gold-600 rounded-lg hover:bg-butter-100 transition" title="Editar">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <button @click="deleteTask(task.id)" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-rose-50 transition" title="Eliminar">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- MENSAJE SI NO HAY ACTIVIDADES -->
+                        <tr v-if="filteredTasks.length === 0">
+                            <td colspan="6" class="text-center py-12">
+                                <div class="max-w-xs mx-auto text-center">
+                                    <div class="w-12 h-12 rounded-full bg-butter-100 text-gold-600 flex items-center justify-center mx-auto mb-3 text-xl">
+                                        <i class="fa-solid fa-calendar-plus"></i>
+                                    </div>
+                                    <p class="font-bold text-slate-700 mb-1">Sin actividades registradas</p>
+                                    <p class="text-xs text-slate-400 mb-4">No hay tareas programadas para {{ selectedDay === 'Todos' ? 'esta semana' : selectedDay }}.</p>
+                                    <button @click="showModal = true" class="btn-gold px-4 py-2 rounded-xl text-xs font-bold shadow">
+                                        + Agregar Actividad
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE FRASE FINAL Y VERSÍCULO BÍBLICO -->
+        <footer class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            
+            <!-- FRASE INSPIRADORA -->
+            <div class="custom-card p-6 rounded-3xl bg-gradient-to-r from-butter-100 to-butter-50 border border-gold-300/40 relative overflow-hidden shadow-sm">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-gold-500 text-white flex items-center justify-center text-xl shadow-md shrink-0">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-gold-700">Inspiración Diaria</span>
+                        <p class="text-lg font-bold text-slate-800 mt-1 font-hand text-2xl">
+                            "Organizar tu tiempo es regalarte paz para disfrutar lo que amas: tejer tus sueños, cumplir tus metas y cultivar el amor."
+                        </p>
+                        <p class="text-xs font-semibold text-slate-500 mt-2">— Un recordatorio para tu crecimiento constante</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VERSÍCULO BÍBLICO -->
+            <div class="custom-card p-6 rounded-3xl bg-gradient-to-r from-sky-100 to-sky-50 border border-sky-200 relative overflow-hidden shadow-sm">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-400 text-white flex items-center justify-center text-xl shadow-md shrink-0">
+                        <i class="fa-solid fa-book-bible"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-sky-800">Versículo Bíblico</span>
+                        <blockquote class="text-slate-800 font-semibold italic text-sm mt-1 leading-relaxed">
+                            "Todo tiene su tiempo, y todo lo que se quiere debajo del cielo tiene su hora."
+                        </blockquote>
+                        <p class="text-xs font-bold text-sky-700 mt-2">— Eclesiastés 3:1</p>
+                    </div>
+                </div>
+            </div>
+
+        </footer>
+
+        <!-- APARTADO DE BRANDING Y CREADORA: AMBAR RODRIGUEZ -->
+        <div class="custom-card p-6 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white shadow-xl border border-gold-500/30 relative overflow-hidden text-center sm:text-left flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-gold-500 to-butter-300 text-slate-900 flex items-center justify-center text-2xl shadow-lg shrink-0">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <div>
+                    <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-gold-500/20 border border-gold-500/40 text-gold-300 text-[11px] font-bold tracking-wider uppercase mb-1">
+                        <i class="fa-solid fa-star text-[9px]"></i> Diseñado & Desarrollado
+                    </div>
+                    <h4 class="text-xl font-extrabold tracking-tight text-white">
+                        Ambar Rodriguez <span class="text-gold-400 font-light">| 2026</span>
+                    </h4>
+                    <p class="text-xs text-slate-300 mt-0.5 font-medium">
+                        Soluciones digitales a la medida • Organización & Branding Personal
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                <a href="https://wa.me/18094318218" target="_blank" class="w-full sm:w-auto px-5 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs flex items-center justify-center gap-2 transition shadow-md">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                    <span>Contactar por WhatsApp</span>
+                </a>
+                <a href="tel:8094318218" class="w-full sm:w-auto px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-phone text-gold-400"></i>
+                    <span>809-431-8218</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- MODAL PARA AGREGAR / EDITAR ACTIVIDAD -->
+        <transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
+            <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
+                <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-gold-200 relative my-8">
+                    
+                    <div class="flex justify-between items-center mb-5 pb-3 border-b border-slate-100">
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-plus text-gold-600"></i>
+                            {{ editingTaskId ? 'Editar Actividad' : 'Nueva Actividad' }}
+                        </h3>
+                        <button @click="closeModal" class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:text-slate-600 flex items-center justify-center">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <form @submit.prevent="saveTask" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Título de la Actividad</label>
+                            <input v-model="form.title" type="text" required placeholder="Ej: Avanzar abrigo tejido, Ir al servicio..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-gold-500 text-sm">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Categoría</label>
+                            <select v-model="form.category" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-gold-500 text-sm bg-white">
+                                <option value="Trabajo">Trabajo</option>
+                                <option value="Iglesia">Iglesia</option>
+                                <option value="Crochet">Crochet</option>
+                                <option value="Tiempo con Jeremy">Tiempo con Jeremy</option>
+                                <option value="Cursos / Tareas">Cursos / Viaje Cotuí</option>
+                                <option value="Personal">Personal / Hogar</option>
+                            </select>
+                        </div>
+
+                        <!-- SELECCIÓN MÚLTIPLE DE DÍAS -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1.5">
+                                <label class="block text-xs font-bold text-slate-600 uppercase">
+                                    Días de la semana <span class="text-gold-600 font-normal text-[11px]">(Puedes elegir varios)</span>
+                                </label>
+                                <!-- Accesos rápidos -->
+                                <div class="flex gap-1 text-[10px] font-bold">
+                                    <button type="button" @click="selectPresetDays('all')" class="px-2 py-0.5 rounded bg-butter-200 text-gold-800 hover:bg-butter-300">Todos</button>
+                                    <button type="button" @click="selectPresetDays('weekdays')" class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 hover:bg-sky-200">Lun-Vie</button>
+                                    <button type="button" @click="selectPresetDays('weekend')" class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 hover:bg-slate-200">Fin de sem</button>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
+                                <label v-for="d in days" :key="d" class="flex items-center gap-2 p-1.5 rounded-xl hover:bg-white cursor-pointer transition text-xs font-semibold text-slate-700">
+                                    <input type="checkbox" :value="d" v-model="form.selectedDays" class="w-4 h-4 rounded text-gold-500 focus:ring-gold-400 border-slate-300">
+                                    <span>{{ d }}</span>
+                                </label>
+                            </div>
+                            <p v-if="form.selectedDays.length === 0" class="text-[11px] text-rose-500 mt-1 font-medium">Selecciona al menos un día.</p>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Fecha Referencia</label>
+                                <input v-model="form.date" type="date" required class="w-full px-2.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-gold-500 text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Hora Inicio</label>
+                                <input v-model="form.startTime" type="time" required class="w-full px-2.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-gold-500 text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Hora Fin</label>
+                                <input v-model="form.endTime" type="time" required class="w-full px-2.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-gold-500 text-xs">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Notas u Observaciones</label>
+                            <textarea v-model="form.notes" rows="2" placeholder="Detalles adicionales..." class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-gold-500 text-xs"></textarea>
+                        </div>
+
+                        <div class="flex justify-end gap-3 pt-3 border-t border-slate-100">
+                            <button type="button" @click="closeModal" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:bg-slate-100">
+                                Cancelar
+                            </button>
+                            <button type="submit" :disabled="form.selectedDays.length === 0" class="btn-gold px-5 py-2 rounded-xl text-xs font-bold shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+                                {{ editingTaskId ? 'Guardar Cambios' : 'Crear Actividad' }}
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </transition>
+
+    </div>
+
+    <!-- VUE 3 LÓGICA -->
+    <script>
+        const { createApp, ref, computed, onMounted, watch } = Vue;
+
+        createApp({
+            setup() {
+                const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+                const selectedDay = ref('Todos');
+                const showModal = ref(false);
+                const showThemeSettings = ref(false);
+                const editingTaskId = ref(null);
+
+                // Colores personalizables
+                const theme = ref({
+                    bgColor: '#FFF9E5',
+                    goldAccent: '#D4AF37',
+                    skyAccent: '#70D6FF'
+                });
+
+                // Lista de tareas organizada y con datos exactos de la rutina de Stefany
+                const tasks = ref([
+                    // LUNES
+                    { id: 1, title: 'AVANZAR TEJIDO VESTIDO/CAMISA', category: 'Crochet', day: 'Lunes', date: '2026-10-28', startTime: '08:30', endTime: '13:00', notes: '', completed: false },
+                    { id: 2, title: 'IR A LA IGLESIA', category: 'Iglesia', day: 'Lunes', date: '2026-10-30', startTime: '18:00', endTime: '19:30', notes: 'Servicio y tiempo de fe por la noche', completed: false },
+
+                    // MARTES
+                    { id: 3, title: 'AVANZAR TEJIDO VESTIDO/CAMISA', category: 'Crochet', day: 'Martes', date: '2026-10-28', startTime: '06:30', endTime: '08:00', notes: '', completed: false },
+                    { id: 4, title: 'JORNADA LABORAL', category: 'Trabajo', day: 'Martes', date: '2026-10-28', startTime: '09:30', endTime: '18:00', notes: '', completed: false },
+                    { id: 5, title: 'IR A LA IGLESIA', category: 'Iglesia', day: 'Martes', date: '2026-10-28', startTime: '19:00', endTime: '22:00', notes: '', completed: false },
+
+                    // MIÉRCOLES
+                    { id: 6, title: 'AVANZAR TEJIDO VESTIDO/CAMISA', category: 'Crochet', day: 'Miércoles', date: '2026-10-28', startTime: '06:30', endTime: '08:00', notes: '', completed: false },
+                    { id: 7, title: 'JORNADA LABORAL', category: 'Trabajo', day: 'Miércoles', date: '2026-10-28', startTime: '09:30', endTime: '18:00', notes: '', completed: false },
+
+                    // JUEVES
+                    { id: 8, title: 'AVANZAR TEJIDO VESTIDO/CAMISA', category: 'Crochet', day: 'Jueves', date: '2026-10-28', startTime: '06:30', endTime: '08:00', notes: '', completed: false },
+                    { id: 9, title: 'JORNADA LABORAL', category: 'Trabajo', day: 'Jueves', date: '2026-10-28', startTime: '09:30', endTime: '18:00', notes: '', completed: false },
+
+                    // VIERNES
+                    { id: 10, title: 'AVANZAR TEJIDO VESTIDO/CAMISA', category: 'Crochet', day: 'Viernes', date: '2026-10-28', startTime: '06:30', endTime: '08:00', notes: '', completed: false },
+                    { id: 11, title: 'JORNADA LABORAL', category: 'Trabajo', day: 'Viernes', date: '2026-10-28', startTime: '09:00', endTime: '18:00', notes: '', completed: false },
+
+                    // SÁBADO
+                    { id: 12, title: 'AVANZAR TEJIDO VESTIDO/CAMISA', category: 'Crochet', day: 'Sábado', date: '2026-10-28', startTime: '06:30', endTime: '08:00', notes: '', completed: false },
+                    { id: 13, title: 'JORNADA LABORAL', category: 'Trabajo', day: 'Sábado', date: '2026-10-28', startTime: '09:00', endTime: '18:00', notes: '', completed: false },
+
+                    // DOMINGO
+                    { id: 14, title: 'AVANZAR TEJIDO VESTIDO/CAMISA', category: 'Crochet', day: 'Domingo', date: '2026-10-28', startTime: '08:30', endTime: '13:00', notes: '', completed: false },
+                    { id: 15, title: 'IR A LA IGLESIA', category: 'Iglesia', day: 'Domingo', date: '2026-10-28', startTime: '17:00', endTime: '19:40', notes: '', completed: false }
+                ]);
+
+                // Formulario con soporte multidía
+                const form = ref({
+                    title: '',
+                    category: 'Crochet',
+                    selectedDays: ['Lunes'],
+                    date: new Date().toISOString().split('T')[0],
+                    startTime: '06:30',
+                    endTime: '08:00',
+                    notes: ''
+                });
+
+                // Función para selección rápida de días
+                const selectPresetDays = (preset) => {
+                    if (preset === 'all') {
+                        form.value.selectedDays = [...days];
+                    } else if (preset === 'weekdays') {
+                        form.value.selectedDays = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+                    } else if (preset === 'weekend') {
+                        form.value.selectedDays = ['Sábado', 'Domingo'];
+                    }
+                };
+
+                // Lista de Consejos
+                const tips = [
+                    {
+                        title: "El Bloque de Tejer al Despertar (6:30 AM - 8:00 AM)",
+                        description: "Levantarte entre 6:30 AM y 7:00 AM para dedicarle hora y media al crochet antes de tus demás obligaciones despeja tu mente y te hace sentir super productiva desde temprano.",
+                        subtext: "Una rutina constante es la clave del progreso."
+                    },
+                    {
+                        title: "Trata tu Horario como si Estuvieras Estudiando",
+                        description: "Cuando defines horas fijas para tejer, ir a la iglesia o estar con Jeremy, tu cerebro lo asume como un deber importante. ¡Así logras todo sin dejar nada fuera!",
+                        subtext: "Disciplina con amor y entusiasmo."
+                    },
+                    {
+                        title: "Aprovecha los Viajes Compartidos con Jeremy",
+                        description: "Transforma los viajes a Cotuí para tus cursos en oportunidades para compartir, platicar y unir lazos con Jeremy mientras te superas profesionalmente.",
+                        subtext: "Combinar responsabilidades con tiempo en pareja."
+                    },
+                    {
+                        title: "Renovación Espiritual Nocturna",
+                        description: "Reservar tus noches para ir a la iglesia te permite cerrar la semana con paz, agradecimiento y energía renovada para tus metas.",
+                        subtext: "Tu fe es el motor de tu constancia."
+                    }
+                ];
+
+                const tipIndex = ref(0);
+                const currentTip = computed(() => tips[tipIndex.value]);
+
+                const nextTip = () => {
+                    tipIndex.value = (tipIndex.value + 1) % tips.length;
+                };
+
+                // Cargar / Guardar LocalStorage
+                onMounted(() => {
+                    const savedTasks = localStorage.getItem('stefany_routine_tasks');
+                    if (savedTasks) {
+                        try { tasks.value = JSON.parse(savedTasks); } catch (e) {}
+                    }
+                    const savedTheme = localStorage.getItem('stefany_routine_theme');
+                    if (savedTheme) {
+                        try { 
+                            theme.value = JSON.parse(savedTheme); 
+                            applyTheme();
+                        } catch (e) {}
+                    }
+                });
+
+                watch(tasks, (newVal) => {
+                    localStorage.setItem('stefany_routine_tasks', JSON.stringify(newVal));
+                }, { deep: true });
+
+                watch(theme, (newVal) => {
+                    localStorage.setItem('stefany_routine_theme', JSON.stringify(newVal));
+                    applyTheme();
+                }, { deep: true });
+
+                const applyTheme = () => {
+                    document.documentElement.style.setProperty('--bg-main', theme.value.bgColor);
+                    document.documentElement.style.setProperty('--primary-gold', theme.value.goldAccent);
+                };
+
+                const resetTheme = () => {
+                    theme.value = {
+                        bgColor: '#FFF9E5',
+                        goldAccent: '#D4AF37',
+                        skyAccent: '#70D6FF'
+                    };
+                };
+
+                // Ordenar por días de la semana (Lunes -> Domingo) y luego por hora de inicio
+                const filteredTasks = computed(() => {
+                    let list = [...tasks.value];
+                    if (selectedDay.value !== 'Todos') {
+                        list = list.filter(t => t.day === selectedDay.value);
+                    }
+                    
+                    return list.sort((a, b) => {
+                        const dayIndexA = days.indexOf(a.day);
+                        const dayIndexB = days.indexOf(b.day);
+                        
+                        if (dayIndexA !== dayIndexB) {
+                            return dayIndexA - dayIndexB;
+                        }
+                        
+                        return a.startTime.localeCompare(b.startTime);
+                    });
+                });
+
+                const totalTasks = computed(() => tasks.value.length);
+                const completedTasks = computed(() => tasks.value.filter(t => t.completed).length);
+                const progressPercentage = computed(() => {
+                    if (totalTasks.value === 0) return 0;
+                    return Math.round((completedTasks.value / totalTasks.value) * 100);
+                });
+
+                // Helpers de estilo
+                const getCategoryBadge = (category) => {
+                    switch (category) {
+                        case 'Trabajo': return 'bg-amber-100 text-amber-800 border border-amber-200';
+                        case 'Iglesia': return 'bg-sky-100 text-sky-800 border border-sky-200';
+                        case 'Crochet': return 'bg-butter-200 text-gold-700 border border-gold-300';
+                        case 'Tiempo con Jeremy': return 'bg-rose-100 text-rose-700 border border-rose-200';
+                        case 'Cursos / Tareas': return 'bg-indigo-100 text-indigo-700 border border-indigo-200';
+                        default: return 'bg-slate-100 text-slate-700';
+                    }
+                };
+
+                const getCategoryIcon = (category) => {
+                    switch (category) {
+                        case 'Trabajo': return 'fa-solid fa-briefcase';
+                        case 'Iglesia': return 'fa-solid fa-church';
+                        case 'Crochet': return 'fa-solid fa-scissors';
+                        case 'Tiempo con Jeremy': return 'fa-solid fa-heart';
+                        case 'Cursos / Tareas': return 'fa-solid fa-graduation-cap';
+                        default: return 'fa-solid fa-check';
+                    }
+                };
+
+                const formatDate = (dateStr) => {
+                    if (!dateStr) return '';
+                    const [year, month, day] = dateStr.split('-');
+                    return `${day}/${month}/${year}`;
+                };
+
+                // Función para convertir hora en formato 24h (HH:mm) a 12h AM/PM
+                const formatTime12H = (time24) => {
+                    if (!time24) return '';
+                    let [hours, minutes] = time24.split(':').map(Number);
+                    const period = hours >= 12 ? 'PM' : 'AM';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12; // Hora '0' se convierte en '12'
+                    const formattedHours = hours < 10 ? '0' + hours : hours;
+                    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+                    return `${formattedHours}:${formattedMinutes} ${period}`;
+                };
+
+                // Acciones de Tareas
+                const toggleTask = (id) => {
+                    const t = tasks.value.find(item => item.id === id);
+                    if (t) t.completed = !t.completed;
+                };
+
+                const deleteTask = (id) => {
+                    tasks.value = tasks.value.filter(t => t.id !== id);
+                };
+
+                const editTask = (task) => {
+                    editingTaskId.value = task.id;
+                    form.value = { 
+                        ...task,
+                        selectedDays: [task.day]
+                    };
+                    showModal.value = true;
+                };
+
+                const closeModal = () => {
+                    showModal.value = false;
+                    editingTaskId.value = null;
+                    form.value = {
+                        title: '',
+                        category: 'Crochet',
+                        selectedDays: ['Lunes'],
+                        date: new Date().toISOString().split('T')[0],
+                        startTime: '06:30',
+                        endTime: '08:00',
+                        notes: ''
+                    };
+                };
+
+                const saveTask = () => {
+                    if (form.value.selectedDays.length === 0) return;
+
+                    if (editingTaskId.value) {
+                        // Edición de tarea individual
+                        const index = tasks.value.findIndex(t => t.id === editingTaskId.value);
+                        if (index !== -1) {
+                            tasks.value[index] = { 
+                                ...form.value, 
+                                day: form.value.selectedDays[0], // asigna el primer día seleccionado al editar
+                                id: editingTaskId.value 
+                            };
+                        }
+                    } else {
+                        // Creación con selección múltiple de días
+                        const baseId = Date.now();
+                        form.value.selectedDays.forEach((day, idx) => {
+                            tasks.value.push({
+                                title: form.value.title,
+                                category: form.value.category,
+                                day: day,
+                                date: form.value.date,
+                                startTime: form.value.startTime,
+                                endTime: form.value.endTime,
+                                notes: form.value.notes,
+                                id: baseId + idx,
+                                completed: false
+                            });
+                        });
+                    }
+                    closeModal();
+                };
+
+                return {
+                    days,
+                    selectedDay,
+                    tasks,
+                    filteredTasks,
+                    totalTasks,
+                    completedTasks,
+                    progressPercentage,
+                    showModal,
+                    showThemeSettings,
+                    editingTaskId,
+                    form,
+                    theme,
+                    currentTip,
+                    nextTip,
+                    toggleTask,
+                    deleteTask,
+                    editTask,
+                    closeModal,
+                    saveTask,
+                    selectPresetDays,
+                    resetTheme,
+                    getCategoryBadge,
+                    getCategoryIcon,
+                    formatDate,
+                    formatTime12H
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
